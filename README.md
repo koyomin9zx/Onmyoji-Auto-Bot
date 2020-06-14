@@ -42,7 +42,9 @@ Make sure you have install python ( version > 3.7) first !!!
 Enter your selection
 
 I will update the usage later
-  
+<br>
+<br>
+<img src="capture.png" ><br>
 
 
 ### References : 
