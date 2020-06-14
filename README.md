@@ -1,82 +1,48 @@
 # Onmyoji-Auto-Bot
+A python script to automatically playing Onmyoji
 
-<li>An python script that automatically playing Onmyoji
-<li> **ONLY SUPPORT ONMYOJI GLOBAL, STEAM VERSION, Win 10** **This is bold text**
-<li>Demo ->>> https://panorama4fun.herokuapp.com/
+**Only support Onmyoji Global sever, PC VERSION !!!**
+<li>Support up to 2 clients
+<li>Working with win10  1920x1080 resolution, scaling size = 100%
 	
 
-### Requirement
-<li>python > 3.7 
-<li>opencv
+### install
+Make sure you have install python first !!!
 
+    pip install -r requirements.txt
 
-    pip install opencv-contrib-python==3.4.2.17 --force-reinstall
-
-### You will need to install some package:
-<li>numpy
-<li>matplotlib
 
 ### Project Structure : 
 		
 		|_ main.py
-		|_Step_By_Step.ipynb
-		|_ utils.py
-		|_ features.py
-		|_ stitch.py
+		|_ GameControl.py
+		|_ Processing.py
+		|_ ThreadGame.py
+		|_ Util.py
 		|	
-		|_ data - |
-		|			|_ myhouse
+		|_ screenshots - |
+		|			|_ Soul
 		|			|			|- 001.jpg
 		|			|			|- 002.jpg
-		|			|_ BK
+		|			|_ Story
 		|			|			|- H1.jpg
 		|			|			|- H2.jpg
 		|			|			|- H3.jpg
 		|			|.....etc.....
-		|_result -|
-		|          		|- myhouse.jpg
-		|          		|- BK.jpg
-		|		   	|.....etc.....
+		
 
 ### To run :
-#### IMPORTANT!!! Images must be supplied in left-to-right order or vice versa .
 
-<li>Slow processing with high resolution images, so it must be resized before stitching
-<li>if you want to resize input images :
-
-    `python main.py -i <input dir> -o <output dir> -r 1 `
+    py main.py
     
-<li>Otherwise
-	
-    `python main.py -i <input dir> -o <output dir> `
- 
- 
+Enter your selection
+
+I will update the usage later
   
-    
-## Outputs !! 
-
-<center>
-<caption>Stitching using Myhouse example</caption><br><br>
-<img src="result/myhouse.jpg" ><br>
-<br><br>
-<caption>Stitching using BK example</caption><br><br>
-<img src="result/BK.jpg" ><br>
-<br><br>
-<caption>Stitching using city example</caption><br><br>
-<img src="result/city.jpg" ><br>
-<br><br>
-<caption>Stitching using parking lot example</caption><br>
-<img src="result/parkinglot.jpg" ><br>
-<br><br>
-<caption>Stitching using building example</caption><br>
-<img src="result/Building.jpg" ><br>
-<br><br>
-</center>
 
 
 ### References : 
-[1] https://www.mathworks.com/help/vision/examples/feature-based-panoramic-image-stitching.html
+[1] https://github.com/AcademicDog/onmyoji_bot
 
-[2] https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
+[2] https://github.com/BluePlumStudio/FK-Onmyoji
 
-[3] http://ppwwyyxx.com/2016/How-to-Write-a-Panorama-Stitcher/
