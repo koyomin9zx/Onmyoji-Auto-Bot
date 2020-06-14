@@ -7,7 +7,7 @@ A python script to automatically playing Onmyoji
 	
 
 ### install
-Make sure you have install python first !!!
+Make sure you have install python ( version > 3.7) first !!!
 
     pip install -r requirements.txt
 
