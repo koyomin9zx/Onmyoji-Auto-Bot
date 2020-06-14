@@ -2,13 +2,15 @@
 A python script to automatically playing Onmyoji
 
 **Only support Onmyoji Global sever, PC VERSION !!!**
+
+### Feature
 <li>Support up to 2 clients !!!
 <li>Working with win10  1920x1080 resolution, scaling size = 100% !!!
 <li>Suport running in background !!!
 <li>Game mode support: Soul, Explore (support replace food when exp is full), Realm Raid, Farming Demon seal (hiyoribo,shouzu..etc)
 	
 
-### install
+### Install
 Make sure you have install python ( version > 3.7) first !!!
 
     pip install -r requirements.txt
