@@ -35,7 +35,7 @@ Make sure you have install python ( version > 3.7) first !!!
 		|			|.....etc.....
 		
 
-### To run :
+### To run : Open cmd
 
     py main.py
     
