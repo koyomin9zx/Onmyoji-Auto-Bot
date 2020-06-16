@@ -95,8 +95,11 @@ IMAGE_STORY_FULL1_PATH="./screenshots/Story/full1.png"
 IMAGE_STORY_FULL2_PATH="./screenshots/Story/full2.png"
 IMAGE_STORY_FOOD_PATH="./screenshots/Story/food.png"
 IMAGE_STORY_CHERRY_CAKE_PATH="./screenshots/Story/cherryCake.png"
-IMAGE_STORY_SHIKIGAMI_SELECTED_PATH="./screenshots/Story/shikigamiSelected8.png"
-IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH="./screenshots/Story/shikigamiSelected.png"
+IMAGE_STORY_SHIKIGAMI_SELECTED_PATH="./screenshots/Story/shikigamiSelected.png"
+IMAGE_STORY_SHIKIGAMI_SELECTED1_PATH="./screenshots/Story/shikigamiSelected1.png"
+IMAGE_STORY_SHIKIGAMI_SELECTED3_PATH="./screenshots/Story/shikigamiSelected3.png"
+IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH="./screenshots/Story/shikigamiSelected2.png"
+IMAGE_STORY_SHIKIGAMI_SELECTED8_PATH="./screenshots/Story/shikigamiSelected8.png"
 IMAGE_STORY_SELECTED_LEVEL_PATH="./screenshots/Story/selectedLevel.png"
 IMAGE_STORY_TEAM_PATH="./screenshots/Story/team.png"
 IMAGE_STORY_TEAMMATE_PATH="./screenshots/Story/teammate.png"
@@ -547,8 +550,12 @@ class Processing(threading.Thread):
                             while count<2:
                                 count+=1
                                 while True:
-                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.95)
-                                    if position:
+                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
                                     
@@ -556,7 +563,20 @@ class Processing(threading.Thread):
                                 printWithTime("Message: Account %s: Shikigami was found..."%(str(self.__id)))
                                 position1=self.__gui.find_game_img(IMAGE_STORY_FULL1_PATH,1,REGION_CHANGE_FULL_EXP_LEADER[0],REGION_CHANGE_FULL_EXP_LEADER[1],thread=0.7)
                                 if position1 != False:
-                                    self.__gui.mouse_drag_bg(position,CHANGE_FOOD_LEADER_RIGHT_COORDINATE)
+                                    if position != False:
+                                        self.__gui.mouse_drag_bg(position,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel1 != False:
+                                        self.__gui.mouse_drag_bg(sel1,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel2 != False:
+                                        self.__gui.mouse_drag_bg(sel2,(position1[0],position1[1]+30),delay=0.1)
+                                    
+                                    elif sel3 != False:
+                                        self.__gui.mouse_drag_bg(sel3,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel8 != False:
+                                        self.__gui.mouse_drag_bg(sel8,(position1[0],position1[1]+30),delay=0.1)
                                     time.sleep(0.5)
                                     
 
@@ -620,9 +640,12 @@ class Processing(threading.Thread):
                                 sel2=False
                                 count+=1
                                 while True:
-                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.95)
+                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    if position != False or sel2 != False:
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
                                     
@@ -634,8 +657,18 @@ class Processing(threading.Thread):
                                     if position != False:
                                         self.__gui.mouse_drag_bg(position,(position1[0],position1[1]+30),delay=0.1)
 
-                                    else:
+                                    elif sel1 != False:
+                                        self.__gui.mouse_drag_bg(sel1,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel2 != False:
                                         self.__gui.mouse_drag_bg(sel2,(position1[0],position1[1]+30),delay=0.1)
+                                    
+                                    elif sel3 != False:
+                                        self.__gui.mouse_drag_bg(sel3,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel8 != False:
+                                        self.__gui.mouse_drag_bg(sel8,(position1[0],position1[1]+30),delay=0.1)
+
                                     time.sleep(0.5)
                                    
                                     
@@ -733,8 +766,11 @@ class Processing(threading.Thread):
                                 count+=1
                                 sel2=False
                                 while True:
-                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.95)
+                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
                                     if position != False or sel2 != False:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
@@ -744,9 +780,19 @@ class Processing(threading.Thread):
                                 position1=self.__gui.find_game_img(IMAGE_STORY_FULL1_PATH,1,REGION_CHANGE_FULL_EXP_PASENGER[0],REGION_CHANGE_FULL_EXP_PASENGER[1],thread=0.7)
                                 if position1 != False:
                                     if position != False:
-                                        self.__gui.mouse_drag_bg(position,position1)
-                                    else:
-                                        self.__gui.mouse_drag_bg(sel2,position1)
+                                        self.__gui.mouse_drag_bg(position,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel1 != False:
+                                        self.__gui.mouse_drag_bg(sel1,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel2 != False:
+                                        self.__gui.mouse_drag_bg(sel2,(position1[0],position1[1]+30),delay=0.1)
+                                    
+                                    elif sel3 != False:
+                                        self.__gui.mouse_drag_bg(sel3,(position1[0],position1[1]+30),delay=0.1)
+
+                                    elif sel8 != False:
+                                        self.__gui.mouse_drag_bg(sel8,(position1[0],position1[1]+30),delay=0.1)
                                     time.sleep(0.5)
                                     
 
@@ -810,8 +856,12 @@ class Processing(threading.Thread):
                             while count<3:
                                 count+=1
                                 while True:
-                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.95)
-                                    if position != False:
+                                    position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
                                     
@@ -821,7 +871,17 @@ class Processing(threading.Thread):
                                 if position1 != False:
                                     X=REGION_CHANGE_EXP_SOLO[0][0]+position1[0]
                                     Y=REGION_CHANGE_EXP_SOLO[0][1]+position1[1]
-                                    self.__gui.mouse_drag_bg(position,(X,Y))
+                                    if position !=False:
+                                        self.__gui.mouse_drag_bg(position,(X,Y))
+                                    elif sel1 !=False:
+                                        self.__gui.mouse_drag_bg(sel1,(X,Y))
+                                    elif sel2 !=False:
+                                        self.__gui.mouse_drag_bg(sel2,(X,Y))
+                                    elif sel3 !=False:
+                                        self.__gui.mouse_drag_bg(sel3,(X,Y))
+                                    elif sel8 !=False:
+                                        self.__gui.mouse_drag_bg(sel8,(X,Y))
+                                    
                                     time.sleep(0.5)
                                     
 
@@ -971,8 +1031,12 @@ class Processing(threading.Thread):
                     while count<3:
                         count+=1
                         while True:
-                            position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.95)
-                            if position != False:
+                            position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
+                            sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                            sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                            sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                            sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                            if position or sel1 or sel2 or sel3 or sel8:
                                 break
                             self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
                             
@@ -982,7 +1046,16 @@ class Processing(threading.Thread):
                         if position1 != False:
                             X=REGION_CHANGE_EXP_SOLO[0][0]+position1[0]
                             Y=REGION_CHANGE_EXP_SOLO[0][1]+position1[1]
-                            self.__gui.mouse_drag_bg(position,(X,Y))
+                            if position !=False:
+                                self.__gui.mouse_drag_bg(position,(X,Y))
+                            elif sel1 !=False:
+                                self.__gui.mouse_drag_bg(sel1,(X,Y))
+                            elif sel2 !=False:
+                                self.__gui.mouse_drag_bg(sel2,(X,Y))
+                            elif sel3 !=False:
+                                self.__gui.mouse_drag_bg(sel3,(X,Y))
+                            elif sel8 !=False:
+                                self.__gui.mouse_drag_bg(sel8,(X,Y))
                             time.sleep(0.5)
                             
 
