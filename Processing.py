@@ -27,8 +27,8 @@ CHOOSE_FRIEND_COORDINATE=(452, 95)
 SLIDE_FRIENDLIST=[(493, 246),(525, 436)]
 INVITE_MEMBER_COORDINATE=(681, 504)
 TEAM_COORDINATE=(569, 492)
-BACK_COORDINATE=(35, 51)
-OK_COORDINATE=(679, 350)
+STORY_BACK_COORDINATE=(35, 51)
+STORY_OK_COORDINATE=(681, 351)
 OK_SOUL_DIALOG_COORDINATE=(679, 375)
 CHECKBOX_COORDINATE=(390, 300)
 SOUL_ICON_COORDINATE=(173, 584)
@@ -71,6 +71,7 @@ IMAGE_SOUL_CREATE_ROOM_PATH="./screenshots/Soul/createRoom.png"
 IMAGE_SOUL_STAGE10_FOCUS_PATH="./screenshots/Soul/stage10Focus.png"
 IMAGE_SOUL_INROOM_PATH="./screenshots/Soul/inroom.png"
 IMAGE_SOUL_STAT_PATH="./screenshots/Soul/stat.png"
+IMAGE_SOUL_SET_PATH="./screenshots/Soul/set.png"
 IMAGE_SOUL_CLOCL_PATH="./screenshots/Soul/clock.png"
 
 
@@ -108,10 +109,14 @@ IMAGE_STORY_SEAL_TICKET_PATH="./screenshots/Story/sealticket.png"
 IMAGE_STORY_LIST_CHAPTER_PATH="./screenshots/Story/listchapter.png"
 IMAGE_STORY_SPIRIT_PATH="./screenshots/Story/spirit.png"
 IMAGE_STORY_ISINTEAM_PATH="./screenshots/Story/lead.png"
+IMAGE_STORY_CREATE_PATH="./screenshots/Story/create.png"
+
 
 IMAGE_SOUL_X_START_PATH="./screenshots/SoulX/start.png"
 IMAGE_SOUL_X_FINISHED1_PATH="./screenshots/SoulX/finished1.png"
 IMAGE_SOUL_X_FINISHED2_PATH="./screenshots/SoulX/finished2.png"
+
+IMAGE_SOUL_SOUGENBI_CHALLENGE="./screenshots/Soul/sougenbiChallenge.png"
 
 IMAGE_REALM_START_PATH="./screenshots/RealmRaid/start.png"
 IMAGE_REALM_SECTION_PATH="./screenshots/RealmRaid/section.png"
@@ -138,6 +143,10 @@ IMAGE_SEAL_FINISHED2_PATH="./screenshots/Seal/finished2.png"
 IMAGE_SEAL_ALL_PATH="./screenshots/Seal/all.png"
 IMAGE_SEAL_JOIN_PATH="./screenshots/Seal/join.png"
 IMAGE_SEAL_REFRESH_PATH="./screenshots/Seal/refresh.png"
+IMAGE_SEAL_WAIT_PATH="./screenshots/Seal/wait.png"
+IMAGE_SEAL_MATCH_PATH="./screenshots/Seal/match.png"
+
+IMAGE_COOP_SEAL="./screenshots/coopwanted.png"
 
 _localVariable=threading.local()
 _DETECTION_INTERVAL=0.2
@@ -190,13 +199,28 @@ class Processing(threading.Thread):
     def gameModeSoul(self):
         printWithTime("Message: Account %s: Multiplayer Soul/Evolution"%(str(self.__id)))
         while True:
+            position=self.__gui.find_game_img(IMAGE_REALM_PROFILE_PATH,thread=0.85)
+            if position != False or self.__gui.find_game_img(IMAGE_SOUL_SET_PATH,thread=0.8) != False:
+                printWithTime("Message: Account %s: In battle detected, sleep 5s ..."%(str(self.__id)))
+                time.sleep(5)
+                continue
+
             #whether is in room..
             if self.__gui.find_game_img(IMAGE_SOUL_INROOM_PATH,thread=0.8) != False: #and self.__gui.find_game_img(IMAGE_SOUL_CLOCL_PATH,thread=0.8) ==False:
                 _localVariable.isInRoom = True
                 _localVariable.isInBattle=False
             #Whether is a leader
             if self.__isCaptain:
-
+                time.sleep(1)
+                #starting..
+                position=self.__gui.find_game_img(IMAGE_SOUL_START_PATH,thread=0.98,gray=0)
+                if position != False:
+                    printWithTime("Message: Account %s: Starting... "%(str(self.__id)))
+                    self.__gui.mouse_click_bg(position)
+                    _localVariable.isInBattle=True
+                    _localVariable.isInRoom=True
+                    continue
+                
                 #invite  to continues..
                 position=self.__gui.find_game_img(IMAGE_SOUL_INVITE_DIALOG_PATH,thread=0.7)
                 if position != False:
@@ -205,15 +229,6 @@ class Processing(threading.Thread):
                     time.sleep(2)
                     self.__gui.mouse_click_bg(OK_SOUL_DIALOG_COORDINATE)
                     _localVariable.isInBattle=False
-                    continue
-                
-                #starting..
-                position=self.__gui.find_game_img(IMAGE_SOUL_START_PATH,thread=0.98,gray=0)
-                if position != False:
-                    printWithTime("Message: Account %s: Starting... "%(str(self.__id)))
-                    self.__gui.mouse_click_bg(position)
-                    _localVariable.isInBattle=True
-                    _localVariable.isInRoom=True
                     continue
 
                 if _isFullTeam:
@@ -248,7 +263,7 @@ class Processing(threading.Thread):
                                             _localVariable.isInBattle=True
                                             _localVariable.isInRoom=True  
                                             printWithTime("Message: Account %s: Invite teamate..... "%(str(self.__id)))
-                                            time.sleep(5)
+                                            time.sleep(2)
                                         else:
                                             count=6
                                             while count>0:
@@ -341,27 +356,39 @@ class Processing(threading.Thread):
                 #         _localVariable.isInRoom=True
                 #         time.sleep(1)
             else:
-                position=self.__gui.find_game_img(IMAGE_STORY_ACCEPT_PATH)
-                if position != False:
-                    message="Message: Account %s: Tried to accept a new round..."%(str(self.__id))
-                    printWithTime(message)
-                    self.__gui.mouse_click_bg(position)
-                    continue
+                if self.__isMainDMG:
+                    position=self.__gui.find_game_img(IMAGE_SOUL_SOUGENBI_CHALLENGE)
+                    if position != False:
+                        message="Message: Account %s: Start new round..."%(str(self.__id))
+                        printWithTime(message)
+                        self.__gui.mouse_click_bg(position)
+                        continue
+
+                else:
+                    position=self.__gui.find_game_img(IMAGE_STORY_ACCEPT_PATH)
+                    if position != False:
+                        message="Message: Account %s: Tried to accept a new round..."%(str(self.__id))
+                        printWithTime(message)
+                        self.__gui.mouse_click_bg(position)
+                        continue
             
             #check finish
-            position=self.__gui.find_game_img(IMAGE_REALM_FINISHED1_PATH,gray=0)
-            if position != False:
-                printWithTime("Message: Account %s: Finishing..."%(str(self.__id)))
-                self.__gui.mouse_click_bg(position)
-                continue
+            # position=self.__gui.find_game_img(IMAGE_REALM_FINISHED1_PATH,gray=0)
+            # if position != False:
+            #     printWithTime("Message: Account %s: Finishing..."%(str(self.__id)))
+            #     self.__gui.mouse_click_bg(position)
+            #     self.__gui.mouse_click_bg(position)
+            #     self.__gui.mouse_click_bg(position)
+            #     self.__gui.mouse_click_bg(position)
+            #     continue
             #claim reward
             position=self.__gui.find_game_img(IMAGE_SOUL_STAT_PATH)
             if position != False:
                 printWithTime("Message: Account %s: Claim reward... "%(str(self.__id)))
-                self.__gui.mouse_click_bg((position[0],position[1]+50))
-                self.__gui.mouse_click_bg((position[0],position[1]+50))
-                self.__gui.mouse_click_bg((position[0],position[1]+50))
-                self.__gui.mouse_click_bg((position[0],position[1]+50))
+                self.__gui.mouse_click_bg((564, 603))
+                self.__gui.mouse_click_bg((564, 603))
+                self.__gui.mouse_click_bg((564, 603))
+                self.__gui.mouse_click_bg((564, 603))
                 continue
             #Fail
             position=self.__gui.find_game_img(IMAGE_REALM_FAILED_PATH,gray=0)
@@ -398,14 +425,18 @@ class Processing(threading.Thread):
                     continue
             
             #detect whether is in batte ?
-            if self.__gui.find_game_img(IMAGE_STORY_CHERRY_CAKE_PATH,thread=0.9) != False:
-                if self.__gui.find_game_img(IMAGE_STORY_ISINTEAM_PATH,thread=0.7) == False:
+            if self.__gui.find_game_img(IMAGE_STORY_CHERRY_CAKE_PATH,thread=0.8) != False:
+                if self.__gui.find_game_img(IMAGE_STORY_ISINTEAM_PATH,thread=0.65) == False:
                     printWithTime("Message: Account %s: Team not detected, exit round.... "%(str(self.__id)))
-                    self.__gui.mouse_click_bg(BACK_COORDINATE)
-                    time.sleep(1)
-                    self.__gui.mouse_click_bg(OK_COORDINATE)
+                    self.__gui.mouse_click_bg(STORY_BACK_COORDINATE)
+                    time.sleep(2)
+                    self.__gui.mouse_click_bg(STORY_OK_COORDINATE,None)
                     time.sleep(1)
                     continue
+            
+            
+
+
             if self.__isCaptain:
                 #=============================================check in battle=================================================
 
@@ -414,6 +445,51 @@ class Processing(threading.Thread):
                     _localVariable.isInBattle = False
                 else:
                     _localVariable.isInBattle = True
+
+                #detect whether in room ?
+                if self.__gui.find_game_img(IMAGE_SOUL_INROOM_PATH,thread=0.7) != False:
+                        position=self.__gui.find_game_img(IMAGE_SOUL_INVITE_PATH,1,REGION_TEAM_INVITE_SOUL[0],REGION_TEAM_INVITE_SOUL[1],thread=0.7)
+                        if position != False:
+                            while True:
+                                position=self.__gui.find_game_img(IMAGE_SOUL_INVITE_PATH,1,REGION_TEAM_INVITE_SOUL[0],REGION_TEAM_INVITE_SOUL[1],thread=0.7)
+                                if position==False:
+                                    break
+                                else:
+                                    self.__gui.mouse_click_bg(position)
+                                    time.sleep(2)
+                                    position=self.__gui.find_game_img(IMAGE_STORY_INVITATION_CONFIRMED_PATH)
+                                    if position != False:
+                                        printWithTime("Message: Account %s: Choosing teammate..... "%(str(self.__id)))
+                                        position=self.__gui.find_game_img(IMAGE_STORY_TEAMMATE_PATH)
+                                        if position != False:
+                                            self.__gui.mouse_click_bg(position)
+                                            time.sleep(1)
+                                            self.__gui.mouse_click_bg(INVITE_MEMBER_SOUL_COORDINATE)
+                                            time.sleep(1)
+                                            self.__gui.mouse_click_bg(START_SOUL_COORDINATE)
+                                            printWithTime("Message: Account %s: Invite teamate..... "%(str(self.__id)))
+                                            time.sleep(2)
+                                        else:
+                                            count=6
+                                            while count>0:
+                                                count-=1
+                                                printWithTime("Message: Account %s: Can't finding ig, re trying..... "%(str(self.__id)))
+                                                position=self.__gui.find_game_img(IMAGE_STORY_TEAMMATE_PATH)
+                                                if position != False:
+                                                    self.__gui.mouse_click_bg(position)
+                                                    time.sleep(1)
+                                                    self.__gui.mouse_click_bg(INVITE_MEMBER_SOUL_COORDINATE)
+                                                    time.sleep(1)
+                                                    self.__gui.mouse_click_bg(START_SOUL_COORDINATE)
+                                                    printWithTime("Message: Account %s: Sucessfully finding teammate, starting battle..... "%(str(self.__id)))
+                                                    break
+                                                if count>3:
+                                                    self.__gui.mouse_drag_bg(SLIDE_FRIEND_LIST_SOUL[0],SLIDE_FRIEND_LIST_SOUL[1])
+                                                else:
+                                                    self.__gui.mouse_drag_bg(SLIDE_FRIEND_LIST_SOUL[1],SLIDE_FRIEND_LIST_SOUL[0])
+                        else:
+                            self.__gui.mouse_click_bg(START_SOUL_COORDINATE)
+                            time.sleep(0.5)
 
                 if self.__gui.find_game_img(IMAGE_STORY_CHERRY_CAKE_PATH) == False and _localVariable.isInBattle == False:
                     position=self.__gui.find_game_img(IMAGE_STORY_INVITE_PATH,thread=0.7)                    
@@ -427,7 +503,7 @@ class Processing(threading.Thread):
                     position=self.__gui.find_game_img(IMAGE_STORY_INVITATION_CONFIRMED_PATH,thread=0.7)
                     if position != False and self.__gui.find_game_img(IMAGE_STORY_APPROVE_PATH,thread=0.7) != False:
                         _localVariable.isBossDetected=False
-                        printWithTime("Message: Account %s: Inviting..... "%(str(self.__id)))
+                        printWithTime("Message: Account %s: Click OK..... "%(str(self.__id)))
                         self.__gui.mouse_click_bg(position)
                         time.sleep(1)
                         continue
@@ -438,49 +514,24 @@ class Processing(threading.Thread):
                             printWithTime("Message: Account %s: Entering last chapter.... "%(str(self.__id)))
                             self.__gui.mouse_click_bg(position)
                             continue
-
+                    
                     position=self.__gui.find_game_img(IMAGE_STORY_TEAM_PATH)
-                    if  position == False and self.__gui.find_game_img(IMAGE_STORY_INVITATION_CONFIRMED_PATH)==False:
-                        printWithTime("Message: Account %s: Choosing level..... "%(str(self.__id)))
+                    if  position == False and self.__gui.find_game_img(IMAGE_STORY_CREATE_PATH,thread=0.8)==False:
+                        printWithTime("Message: Account %s: Choosing HARD level..... "%(str(self.__id)))
                         self.__gui.mouse_click_bg(CHOOSE_LEVEL_HARD_COORDINATE)
                         self.__gui.mouse_click_bg(CHOOSE_LEVEL_HARD_COORDINATE)
                         continue
                     else:
                         self.__gui.mouse_click_bg(TEAM_COORDINATE)
-                        count=7
-                        while count>0:
-                            position=self.__gui.find_game_img(IMAGE_STORY_INVITATION_CONFIRMED_PATH)
-                            if position != False:
-                                printWithTime("Message: Account %s: Choosing teammate..... "%(str(self.__id)))
-                                self.__gui.mouse_click_bg(CHOOSE_FRIEND_COORDINATE)
-                                time.sleep(5)
-                                position=self.__gui.find_game_img(IMAGE_STORY_TEAMMATE_PATH)
-                                printWithTime("Message: Account %s: Finding ig..... "%(str(self.__id)))
-                                if position != False:
-                                    self.__gui.mouse_click_bg(position)
-                                    time.sleep(1)
-                                    self.__gui.mouse_click_bg(INVITE_MEMBER_COORDINATE)
-                                    _localVariable.isBossDetected=False
-                                    printWithTime("Message: Account %s: Starting exploration..... "%(str(self.__id)))
-                                else:
-                                    while count>0:
-                                        count-=1
-                                        printWithTime("Message: Account %s: Can't finding ig, re trying..... "%(str(self.__id)))
-                                        position=self.__gui.find_game_img(IMAGE_STORY_TEAMMATE_PATH)
-                                        if position != False:
-                                            self.__gui.mouse_click_bg(position)
-                                            time.sleep(1)
-                                            self.__gui.mouse_click_bg(INVITE_MEMBER_COORDINATE)
-                                            _localVariable.isBossDetected=False
-                                            printWithTime("Message: Account %s: Sucessfully finding teammate, starting battle..... "%(str(self.__id)))
-                                            break
-                                        if count>3:
-                                            self.__gui.mouse_drag_bg(SLIDE_FRIENDLIST[0],SLIDE_FRIENDLIST[1])
-                                        else:
-                                            self.__gui.mouse_drag_bg(SLIDE_FRIENDLIST[1],SLIDE_FRIENDLIST[0])
-                                break
-                            else:
-                                count-=1
+                        time.sleep(0.5)
+
+                    position=self.__gui.find_game_img(IMAGE_STORY_CREATE_PATH,thread=0.8)
+                    if position != False:
+                        printWithTime("Message: Account %s: Create room..... "%(str(self.__id)))
+                        self.__gui.mouse_click_bg(position)
+                        continue
+                    
+                    
                 #===============================================slide windows if not found monster
                 if self.__gui.find_game_img(IMAGE_STORY_FIGHT_PATH) == False and self.__gui.find_game_img(IMAGE_STORY_CHERRY_CAKE_PATH) != False and self.__gui.find_game_img(IMAGE_STORY_FIGHT_BOSS_PATH) == False:
                     _localVariable.detectCount-=1
@@ -510,7 +561,6 @@ class Processing(threading.Thread):
                     self.__gui.mouse_click_bg(position)
                     _localVariable.isInBattle = True
                     continue
-                
                 
                 
                 #=========================================replace shikigami=========================================
@@ -551,10 +601,10 @@ class Processing(threading.Thread):
                                 count+=1
                                 while True:
                                     position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
-                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED1_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED3_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED8_PATH,thread=0.9)
                                     if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
@@ -641,10 +691,10 @@ class Processing(threading.Thread):
                                 count+=1
                                 while True:
                                     position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
-                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED1_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED3_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED8_PATH,thread=0.9)
                                     if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
@@ -767,10 +817,10 @@ class Processing(threading.Thread):
                                 sel2=False
                                 while True:
                                     position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
-                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED1_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED3_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED8_PATH,thread=0.9)
                                     if position != False or sel2 != False:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
@@ -823,7 +873,7 @@ class Processing(threading.Thread):
                         if not _isPaused:
                             self.__thread.threadGameRelease()
                 else:
-                    if _replaceShikigamiIfFull and self.__gui.find_game_img(IMAGE_STORY_FULL1_PATH,1,REGION_FIND_FULL_EXP_SOLO[0],REGION_FIND_FULL_EXP_SOLO[1]) != False:
+                    if _replaceShikigamiIfFull and self.__gui.find_game_img(IMAGE_STORY_FULL1_PATH,1,REGION_FIND_FULL_EXP_SOLO[0],REGION_FIND_FULL_EXP_SOLO[1],thread=0.75) != False:
                         printWithTime("Message: Account %s: Full-EXP shikigami was detected..."%(str(self.__id)))
                         def inner():
                             global _fullShikigamiCount 
@@ -857,10 +907,10 @@ class Processing(threading.Thread):
                                 count+=1
                                 while True:
                                     position=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED_PATH,thread=0.9)
-                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel1=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED1_PATH,thread=0.9)
                                     sel2=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
-                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED2_PATH,thread=0.9)
+                                    sel3=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED3_PATH,thread=0.9)
+                                    sel8=self.__gui.find_game_img(IMAGE_STORY_SHIKIGAMI_SELECTED8_PATH,thread=0.9)
                                     if position or sel1 or sel2 or sel3 or sel8:
                                         break
                                     self.__gui.mouse_drag_bg(SLIDE_CHANGE_SHIKI[1],SLIDE_CHANGE_SHIKI[0])
@@ -913,8 +963,7 @@ class Processing(threading.Thread):
                             self.__thread.threadGameRelease()
 
                #=========================================get ready=================================================
-
-                position=self.__gui.find_game_img(IMAGE_STORY_READY_PATH,thread=0.8)
+                position=self.__gui.find_game_img(IMAGE_STORY_READY_PATH,thread=0.7)
                 if position != False:
                     printWithTime("Message: Account %s: Starting battle.... "%(str(self.__id)))
                     self.__gui.mouse_click_bg(position)
@@ -941,7 +990,7 @@ class Processing(threading.Thread):
                         printWithTime("Message: Account %s: Get reward...."%(str(self.__id)))
                     break  
 
-                position=self.__gui.find_game_img(IMAGE_STORY_ACCEPT_PATH,thread=0.9)
+                position=self.__gui.find_game_img(IMAGE_STORY_ACCEPT_PATH,thread=0.7)
                 if position != False:
                     message="Message: Account %s: Tried to accept a new round Chapter Exploration..."%(str(self.__id))
                     printWithTime(message)
@@ -1207,31 +1256,53 @@ class Processing(threading.Thread):
     def gameModeDemonSeal(self):
         printWithTime("Message: Account :%s: Fairy Seal"%(str(self.__id)))
         while True:
+            position=self.__gui.find_game_img(IMAGE_SEAL_WAIT_PATH,thread=0.8)
+            if position != False:
+                printWithTime("Message: Account :%s: Finding team, sleep 10s..."%(str(self.__id)))
+                time.sleep(10)
+                continue
+            
+            position=self.__gui.find_game_img(IMAGE_STORY_READY_PATH,gray=0,thread=0.8)
+            if position != False:
+                printWithTime("Message: Account %s: Ready for battle.... "%(str(self.__id)))
+                time.sleep(5)
+                self.__gui.mouse_click_bg(position)
+                #time.sleep(2)
+                continue  
+
+            position=self.__gui.find_game_img(IMAGE_REALM_PROFILE_PATH,thread=0.85)
+            if position != False:
+                printWithTime("Message: Account %s: In battle detected, sleep 5s ..."%(str(self.__id)))
+                time.sleep(5)
+                continue
+
             position=self.__gui.find_game_img(IMAGE_SEAL_TEAM_PATH)
             if position != False:
                 printWithTime("Message: Account :%s: Clicking team icon..."%(str(self.__id)))
                 self.__gui.mouse_click_bg(position)
                 continue
 
-
-            if self.__gui.find_game_img(IMAGE_SEAL_REFRESH_PATH) != False:
-                while True:
-                    self.__gui.mouse_click_bg(REFRESH_SEAL_COORDINATE)
-                    time.sleep(0.5)
-                    position=self.__gui.find_game_img(IMAGE_SEAL_JOIN_PATH)
-                    if position != False:
-                        self.__gui.mouse_click_bg(position)
-                        self.__gui.mouse_click_bg(position)
-                        self.__gui.mouse_click_bg(position)
-                        printWithTime("Message: Account :%s: Click to join..."%(str(self.__id)))
-                        break
-
-            position=self.__gui.find_game_img(IMAGE_STORY_READY_PATH,gray=0,thread=0.8)
+            position=self.__gui.find_game_img(IMAGE_SEAL_MATCH_PATH)
             if position != False:
-                printWithTime("Message: Account %s: Ready for battle.... "%(str(self.__id)))
+                printWithTime("Message: Account :%s: Matching..."%(str(self.__id)))
                 self.__gui.mouse_click_bg(position)
-                #time.sleep(2)
-                continue  
+                time.sleep(1)
+                continue
+            
+
+            # if self.__gui.find_game_img(IMAGE_SEAL_REFRESH_PATH) != False:
+            #     while True:
+            #         self.__gui.mouse_click_bg(REFRESH_SEAL_COORDINATE)
+            #         time.sleep(0.5)
+            #         position=self.__gui.find_game_img(IMAGE_SEAL_JOIN_PATH)
+            #         if position != False:
+            #             self.__gui.mouse_click_bg(position)
+            #             self.__gui.mouse_click_bg(position)
+            #             self.__gui.mouse_click_bg(position)
+            #             printWithTime("Message: Account :%s: Click to join..."%(str(self.__id)))
+            #             break
+
+            
 
             #check finish
             position=self.__gui.find_game_img(IMAGE_REALM_FINISHED1_PATH,gray=0)
@@ -1275,18 +1346,21 @@ class Processing(threading.Thread):
     def detectAssistance(self):
         
         while True:
-            time.sleep(5)
+            time.sleep(10)
             message="Message: Account %s: Checking co-op wanted seal..."%(str(self.__id))
             printWithTime(message)
-            if not self.__gui.rejectbounty():
+            
+            coop=self.__gui.find_game_img(IMAGE_COOP_SEAL,thread=0.8)
+            if coop == False:
                 continue
-
+            
             message="Message: Account %s: An invitation for a wanted seal was detected..."%(str(self.__id))
             printWithTime(message)
 
 
             message="Message: Account %s: Refuse to accept the invitation for the wanted seal..."%(str(self.__id))
             printWithTime(message)
+            self.__gui.mouse_click_bg((750, 452))
 #
     def run(self):
         _localVariable.isBossDetected=False

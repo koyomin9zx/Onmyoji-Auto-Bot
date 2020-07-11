@@ -539,9 +539,9 @@ class GameControl():
         Refusal
         return: refuse to return True, otherwise return False
         '''
-        maxVal, maxLoc = self.find_img('./screenshots/coopwanted.png')
+        maxVal, maxLoc = self.find_img('./screenshots/coopwanted.png',thread=0.8)
         if maxVal > 0.9:
-            self.mouse_click_bg((757, 460))
+            self.mouse_click_bg((749, 453))
             return True
         return False
 
@@ -673,14 +673,15 @@ def callback(hwnd, hwnds):
 def main():
     hwnd = win32gui.FindWindow(0, 'Onmyoji')
     yys = GameControl(hwnd, 0)
-    #yys.activate_window()
+    yys.activate_window()
+    yys.mouse_click_bg((681, 351))
     #REGION_FIND_FULL_EXP_SOLO=[(0,0),(520, 600)]
     #IMAGE_SOUL_INVITE_DIALOG_PATH="/screenshots/Soul/inviteDialog.png"
-    yys.debug_enable=True
+    #yys.debug_enable=True
     #a=yys.window_full_shot()
     #show_img(a)
 
-    yys.find_img("screenshots/Soul/inviteDialog.png")
+    #yys.find_img("screenshots/Soul/inviteDialog.png")
     #IMAGE_STORY_FULL1_PATH="./screenshots/Story/full2.png"
     #REGION_CHANGE_EXP_SOLO=[(387, 61),(1105, 374)]
     #IMAGE_STORY_SHIKIGAMI_SELECTED_PATH="./screenshots/Story/shikigamiSelected8.png"
