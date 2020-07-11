@@ -20,7 +20,8 @@ def main():
              \n2. Exploration \
                 \n3. Single Exploration \
                   \n4. Realm Raid \
-                  \n5. Demon Seal\n"
+                  \n5. Demon Seal \
+                  \n6. Event\n "
         gameMode=int(pyautogui.prompt(text=alert+name_acc+gameMode, title='Onmyoji bot' , default='2'))
         isCaptain=True
         isMainDMG=True

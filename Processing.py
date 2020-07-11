@@ -147,6 +147,8 @@ IMAGE_SEAL_WAIT_PATH="./screenshots/Seal/wait.png"
 IMAGE_SEAL_MATCH_PATH="./screenshots/Seal/match.png"
 
 IMAGE_COOP_SEAL="./screenshots/coopwanted.png"
+IMAGE_START_FIGHT="./screenshots/Event/fight.png"
+IMAGE_TARGET_SHIKIGAMI="./screenshots/Event/target.png"
 
 _localVariable=threading.local()
 _DETECTION_INTERVAL=0.2
@@ -1328,6 +1330,11 @@ class Processing(threading.Thread):
                 self.__gui.mouse_click_bg(position)
                 continue
 #
+    def gameModeEvent(self):
+        while True:
+            self.targetShikigami()
+#
+
     def detectPause(self):
         global _isPaused
         while True:
@@ -1362,6 +1369,52 @@ class Processing(threading.Thread):
             printWithTime(message)
             self.__gui.mouse_click_bg((750, 452))
 #
+    def targetShikigami(self,location=None):
+        profile=self.__gui.find_game_img(IMAGE_REALM_PROFILE_PATH,thread=0.8)
+        set=self.__gui.find_game_img(IMAGE_SOUL_SET_PATH,thread=0.8)
+        if profile!=False and set==False:
+            while True:
+                profile=self.__gui.find_game_img(IMAGE_REALM_PROFILE_PATH,thread=0.8)
+                target=self.__gui.find_game_img(IMAGE_TARGET_SHIKIGAMI,thread=0.8)
+                if target==False and profile!=False:
+                    message="Message: Account %s: Target to the 5th shikigami..."%(str(self.__id))
+                    printWithTime(message)
+                    self.__gui.mouse_click_bg((859, 423))
+                    time.sleep(1)
+                
+                if target!=False and profile!=False:
+                    while self.isInBattle():
+                        printWithTime("Message: Account %s: In battle detected, sleep 5s ..."%(str(self.__id)))
+                        time.sleep(5)
+                    break
+        else:
+            time.sleep(1)
+
+
+    def claimRewardBattle(self):
+        position=self.__gui.find_game_img(IMAGE_STORY_FINISHED1_PATH)
+        if position != False:
+            printWithTime("Message: Account %s: Finishing.... "%(str(self.__id)))
+            self.__gui.mouse_click_bg(position)
+            
+        
+        position=self.__gui.find_game_img(IMAGE_STORY_FINISHED2_PATH)
+        if position != False:
+            printWithTime("Message: Account %s: Finished.... "%(str(self.__id)))
+            self.__gui.mouse_click_bg(position)
+            while True:
+                if self.__gui.find_game_img(IMAGE_STORY_FINISHED2_PATH)== False:
+                    break
+                self.__gui.mouse_click_bg(position)
+                printWithTime("Message: Account %s: Get reward.... position"%(str(self.__id)))
+              
+    def isInBattle(self):
+        position=self.__gui.find_game_img(IMAGE_REALM_PROFILE_PATH,thread=0.85)
+        if position != False or self.__gui.find_game_img(IMAGE_SOUL_SET_PATH,thread=0.8) != False:
+            return True
+        return False   
+
+
     def run(self):
         _localVariable.isBossDetected=False
         _localVariable.isInBattle=False
@@ -1386,6 +1439,8 @@ class Processing(threading.Thread):
                 self.gameModeRealmRaid()
             elif self.__gameMode==5:
                 self.gameModeDemonSeal()
+            elif self.__gameMode==6:
+                self.gameModeEvent()
             count+=1
             message="Account %s: Game mode %s, completed %s round, remaining %s round..."%(str(self.__id),str(self.__gameMode),str(count),str(self.__total-count))
             printWithTime(message)
